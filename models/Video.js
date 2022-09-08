@@ -11,7 +11,8 @@ const videoSchema = new mongoose.Schema({
         required: true,
     },
     CateID:{
-        type: String,
+        required: true,
+        type: Number,
     },
     channelTitle:{
         type: String,
@@ -24,7 +25,12 @@ const videoSchema = new mongoose.Schema({
     },
     likeCount:{
         type: Number,
-    }
+    },
+    createdBy: {
+        userId: mongoose.SchemaTypes.ObjectId,
+        imageUrl: String,
+        username: String,
+    },
 
 },  {timestamps: true})
 

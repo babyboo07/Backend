@@ -5,13 +5,21 @@ dotenv.config();
 const videoController = {
   createVideo: async (req, res) => {
     try {
+      const video = req.body.video;
+      console.log(video.createdBy);
       const newVideo = await new Video({
-        title: req.body.title,
-        videoID: req.body.videoID,
-        channelTitle: req.body.channelTitle,
-        publishedAt: req.body.publishedAt,
-        viewCount: req.body.viewCount,
-        likeCount: req.body.likeCount,
+        title: video.title,
+        videoID: video.videoID,
+        channelTitle: video.channelTitle,
+        publishedAt: video.publishedAt,
+        viewCount: video.viewCount,
+        likeCount: video.likeCount,
+        CateID: video.CateID,
+        createdBy: {
+          userId : video.createdBy.userId,
+          imageUrl: video.createdBy.imageURL,
+          username: video.createdBy.username,
+      }
       });
 
       const response = await newVideo.save();
@@ -31,7 +39,7 @@ const videoController = {
   },
   searchVideoByName: async (req, res) => {
     try {
-      const video = await Video.find({ title: { $regex: req.query.title} });
+      const video = await Video.find({ title: { $regex: new RegExp(req.query.title, "i") } });
       if (!video) res.status(404).json(`Undefined ${req.query.title}`);
       res.status(200).json(video);
     } catch (error) {
